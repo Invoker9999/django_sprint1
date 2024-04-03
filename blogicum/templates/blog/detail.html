@@ -1,5 +1,7 @@
 {% extends "base.html" %}
-{% block title %} {{ post.location }}. {{ post.date }} {% endblock %}
+{% block title %} 
+  {{ post.location }}. {{ post.date }} 
+{% endblock %}
 {% block content %}
-{% include 'includes/article.html' with is_main_page=False %}
+  {% include 'includes/article.html'%}
 {% endblock %}

@@ -1,7 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
 
-
 posts = [
     {
         'id': 0,
@@ -46,22 +45,19 @@ posts = [
 ]
 
 
-rev_posts = list(reversed(posts))
-
-
 def index(request):
     template = 'blog/index.html'
-    context = {'posts': rev_posts}
+    context = {'posts': reversed(posts)}
     return render(request, template, context)
 
 
-def post_detail(request, post_num):
+def post_detail(request, post_id):
     template = 'blog/detail.html'
-    if post_num > len(posts):
-        raise Http404('Вы указали неверный номер поста')
-    else:
-        post = posts[post_num]
-    context = {'post': post}
+    posts_by_id = {item['id']: item for item in posts}
+    if post_id not in posts_by_id:
+        raise Http404(f'Пост {post_id} не найден! Проверьте, верно ли указан '
+                      'номер поста')
+    context = {"post": posts_by_id[post_id]}
     return render(request, template, context)
 
 
