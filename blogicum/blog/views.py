@@ -1,4 +1,5 @@
-from django.shortcuts import render    # type: ignore
+from django.shortcuts import render
+from django.http import Http404
 
 
 posts = [
@@ -45,23 +46,26 @@ posts = [
 ]
 
 
+rev_posts = list(reversed(posts))
+
+
 def index(request):
     template = 'blog/index.html'
-    context = {'posts': posts}
+    context = {'posts': rev_posts}
     return render(request, template, context)
 
 
-def post_detail(request, id):
+def post_detail(request, post_num):
     template = 'blog/detail.html'
-    post = [post for post in posts if post['id'] == id]
-    context = {'post': post[0]}
+    if post_num > len(posts):
+        raise Http404('Вы указали неверный номер поста')
+    else:
+        post = posts[post_num]
+    context = {'post': post}
     return render(request, template, context)
 
 
 def category_posts(request, category_slug):
     template = 'blog/category.html'
-    sorted_posts = [post for post in posts if post['category']
-                    == category_slug]
-    context = {'category': category_slug,
-               'posts': sorted_posts}
+    context = {'category': category_slug}
     return render(request, template, context)
