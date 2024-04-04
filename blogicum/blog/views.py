@@ -44,6 +44,8 @@ posts = [
     },
 ]
 
+posts_by_id = {post['id']: post for post in posts}
+
 
 def index(request):
     template = 'blog/index.html'
@@ -53,11 +55,10 @@ def index(request):
 
 def post_detail(request, post_id):
     template = 'blog/detail.html'
-    posts_by_id = {item['id']: item for item in posts}
     if post_id not in posts_by_id:
         raise Http404(f'Пост {post_id} не найден! Проверьте, верно ли указан '
                       'номер поста')
-    context = {"post": posts_by_id[post_id]}
+    context = {'post': posts_by_id[post_id]}
     return render(request, template, context)
 
 
